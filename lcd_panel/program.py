@@ -9,8 +9,7 @@ LCD_DEVICE = sys.argv[1]
 
 HEADERS = {'Authorization': f'Bearer {BEARER_TOKEN}','Content-Type': 'application/json'}
 
-def WriteStat(ser, label, entityCallback):
-  label += ":"
+def WriteStat(ser, label, entityCallback):  
   try:
     WriteMessage(ser, label, entityCallback())
   except BaseException as err:
@@ -23,7 +22,11 @@ def WriteStat(ser, label, entityCallback):
     time.sleep(5)
 
 def WriteMessage(ser, line1, line2):  
-  ser.write(f'{{"line1":"{line1[0:16]}","line2":"{line2[0:16]:>16}"}}'.encode())
+  ser.open()
+  try:
+    ser.write(f'{{"line1":"{line1.center(16)}","line2":"{line2.center(16)}"}}'.encode())
+  finally:
+    ser.close()
 
 def GetState(entity):
   return entity["state"]
@@ -59,16 +62,15 @@ def GetPlaceholder():
 
 def main():
   print(f"Opening serial connection to {LCD_DEVICE}", flush=True)
-  ser = serial.Serial(
-    port=LCD_DEVICE,
-    baudrate=9600,
-    parity=serial.PARITY_NONE,
-    stopbits=serial.STOPBITS_ONE,
-    bytesize=serial.EIGHTBITS,
-    xonxoff=serial.XOFF,
-    rtscts=False,
-    dsrdtr=False
-  )
+  ser = serial.Serial()
+  ser.port=LCD_DEVICE
+  ser.baudrate=9600
+  ser.parity=serial.PARITY_NONE
+  ser.stopbits=serial.STOPBITS_ONE
+  ser.bytesize=serial.EIGHTBITS
+  ser.xonxoff=serial.XOFF
+  ser.rtscts=False
+  ser.dsrdtr=False
 
   while True:
     WriteStat(ser, "CPU Temp", GetCPUTemp)
