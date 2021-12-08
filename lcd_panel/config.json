@@ -1,6 +1,6 @@
 {
   "name": "LCD Panel",
-  "version": "31",
+  "version": "32",
   "slug": "lcd_panel",
   "description": "Custom LCD panel controller",
   "arch": [
