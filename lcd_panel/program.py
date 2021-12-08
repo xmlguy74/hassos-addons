@@ -10,6 +10,7 @@ LCD_DEVICE = sys.argv[1]
 HEADERS = {'Authorization': f'Bearer {BEARER_TOKEN}','Content-Type': 'application/json'}
 
 def WriteStat(ser, label, entityCallback):
+  label += ":"
   try:
     WriteMessage(ser, label, entityCallback())
   except BaseException as err:
