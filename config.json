@@ -1,0 +1,29 @@
+{
+  "name": "LCD Panel",
+  "version": "31",
+  "slug": "lcd_panel",
+  "description": "Custom LCD panel controller",
+  "arch": [
+    "armhf",
+    "armv7",
+    "aarch64",
+    "amd64",
+    "i386"
+  ],
+  "startup": "application",
+  "boot": "auto",
+  "options": {
+    "lcd_device": null
+  },
+  "privileged": [
+    "SYS_RAWIO"
+  ],
+  "schema": {
+    "lcd_device": "device(subsystem=tty)"
+  },
+  "udev": true,
+  "usb": true,
+  "homeassistant_api": true,
+  "hassio_api": true,
+  "hassio_role": "homeassistant"
+}
