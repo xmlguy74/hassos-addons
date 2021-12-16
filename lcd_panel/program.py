@@ -24,6 +24,7 @@ def WriteStat(ser, label, entityCallback):
     except BaseException as err2:
       print(f'Error in exception handler for {label}. {err2=}', flush=True)
   finally:
+    time.sleep(0.5)
     writeLock.release()
 
 def WriteMessage(ser, line1, line2):  
@@ -58,6 +59,12 @@ def GetHostUptime():
   else:
     return f"{days} day{'s'[:days^1]}"
 
+def GetHostInternet():
+  req = requests.get(f'http://supervisor/network/info', headers=HEADERS)
+  info = req.json()
+  internet = info["data"]["host_internet"]
+  return "Up" if internet else "Down"
+
 def GetAlarm():
   e = GetEntity("alarm_control_panel.alarm")
   return GetState(e).capitalize()
@@ -81,6 +88,7 @@ def main():
     ("CPU Temp", GetCPUTemp),
     ("Alarm", GetAlarm),
     ("Host Uptime", GetHostUptime),
+    ("Host Internet", GetHostInternet),
   ]
 
   statOffset = 0
