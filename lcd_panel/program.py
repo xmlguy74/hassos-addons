@@ -3,13 +3,18 @@ import requests
 import sys
 import time
 import os
+import RPi.GPIO as GPIO
+import threading
 
 BEARER_TOKEN = os.environ.get('SUPERVISOR_TOKEN')
 LCD_DEVICE = sys.argv[1]
 
 HEADERS = {'Authorization': f'Bearer {BEARER_TOKEN}','Content-Type': 'application/json'}
 
-def WriteStat(ser, label, entityCallback):  
+writeLock = threading.Lock()
+
+def WriteStat(ser, label, entityCallback):
+  writeLock.acquire()
   try:
     WriteMessage(ser, label, entityCallback())
   except BaseException as err:
@@ -19,7 +24,7 @@ def WriteStat(ser, label, entityCallback):
     except BaseException as err2:
       print(f'Error in exception handler for {label}. {err2=}', flush=True)
   finally:
-    time.sleep(5)
+    writeLock.release()
 
 def WriteMessage(ser, line1, line2):  
   ser.open()
@@ -72,9 +77,34 @@ def main():
   ser.rtscts=False
   ser.dsrdtr=False
 
+  stats = [
+    ("CPU Temp", GetCPUTemp),
+    ("Alarm", GetAlarm),
+    ("Host Uptime", GetHostUptime),
+  ]
+
+  statOffset = 0
+
+  event = threading.Event()
+
+  print("Setting up GPIO pins")
+  def my_callback(channel):
+    event.set()
+
+  print(f"GPIO version = {GPIO.VERSION}")
+  GPIO.setmode(GPIO.BCM)
+  GPIO.setup(24, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+  GPIO.add_event_detect(24, GPIO.FALLING, callback=my_callback, bouncetime=200)
+
   while True:
-    WriteStat(ser, "CPU Temp", GetCPUTemp)
-    WriteStat(ser, "Alarm", GetAlarm)
-    WriteStat(ser, "Host Uptime", GetHostUptime)
+    # get the next message
+    WriteStat(ser, stats[statOffset][0], stats[statOffset][1])
+    
+    # wait for a timeout or signal
+    if (event.wait(5)):
+      event.clear()
+
+    # increment to next stat
+    statOffset = (statOffset + 1) % len(stats)
 
 main()

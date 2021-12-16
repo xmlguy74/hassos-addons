@@ -1,6 +1,6 @@
 {
   "name": "LCD Panel",
-  "version": "32",
+  "version": "33",
   "slug": "lcd_panel",
   "description": "Custom LCD panel controller",
   "arch": [
@@ -12,17 +12,24 @@
   ],
   "startup": "application",
   "boot": "auto",
-  "options": {
-    "lcd_device": null
-  },
   "privileged": [
     "SYS_RAWIO"
   ],
+  "apparmor": false,
+  "full_access": false,
+  "options": {
+    "lcd_device": null
+  },
   "schema": {
     "lcd_device": "device(subsystem=tty)"
   },
+  "devices": [
+    "/dev/mem"
+  ],
+  "devicetree": true,
   "udev": true,
   "usb": true,
+  "gpio": true,
   "homeassistant_api": true,
   "hassio_api": true,
   "hassio_role": "homeassistant"
