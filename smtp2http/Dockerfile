@@ -1,6 +1,6 @@
 #ARG BUILD_FROM
 #FROM $BUILD_FROM
-FROM hassio-addons/base/amd64
+FROM homeassistant/amd64-base
 
 ENV LANG C.UTF-8
 

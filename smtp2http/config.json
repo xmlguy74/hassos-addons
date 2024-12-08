@@ -1,14 +1,10 @@
 {
   "name": "SMTP to HTTP Relay",
-  "version": "2",
+  "version": "3",
   "slug": "smtp2http",
   "description": "SMTP to HTTP Relay",
   "arch": [
-    "armhf",
-    "armv7",
-    "aarch64",
-    "amd64",
-    "i386"
+    "amd64"
   ],
   "startup": "application",
   "boot": "auto",
