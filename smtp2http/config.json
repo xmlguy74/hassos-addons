@@ -1,6 +1,6 @@
 {
   "name": "SMTP to HTTP Relay",
-  "version": "4",
+  "version": "5",
   "slug": "smtp2http",
   "description": "SMTP to HTTP Relay",
   "arch": [
@@ -11,6 +11,7 @@
   "privileged": [
   ],
   "apparmor": true,
+  "host_network": true,
   "full_access": false,
   "devicetree": false,
   "udev": false,
