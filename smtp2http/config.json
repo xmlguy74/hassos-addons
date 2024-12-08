@@ -4,6 +4,9 @@
   "slug": "smtp2http",
   "description": "SMTP to HTTP Relay",
   "arch": [
+    "armhf",
+    "armv7",
+    "aarch64",
     "amd64",
     "i386"
   ],
