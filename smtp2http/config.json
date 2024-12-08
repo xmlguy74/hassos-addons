@@ -1,6 +1,6 @@
 {
   "name": "SMTP to HTTP Relay",
-  "version": "3",
+  "version": "4",
   "slug": "smtp2http",
   "description": "SMTP to HTTP Relay",
   "arch": [
