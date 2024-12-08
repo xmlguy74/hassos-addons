@@ -1,6 +1,6 @@
 #ARG BUILD_FROM
 #FROM $BUILD_FROM
-FROM homeassistant/armv7-base-python
+FROM hassio-addons/base/amd64
 
 ENV LANG C.UTF-8
 
